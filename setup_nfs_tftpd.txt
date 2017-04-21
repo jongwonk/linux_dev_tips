@@ -1,0 +1,35 @@
+
+1. Install TFTP & NFS packages
+   -  apt-get install nfs-kernel-server tftpd tftp xinetd
+
+2. Setup NFS
+   - mkdir /nfsroot
+   - chmod 777 /nfsroot
+   - nano /etc/exports
+   -- add "/nfsroot *(rw,no_root_squash,no_all_squash,no_subtree_check,async)"
+
+3. Restart NFS server
+  /etc/init.d/nfs-kernel-server restart
+  exportfs -r
+
+4. Setup TFTP
+  nano /etc/xinetd.d/tftpd
+
+service tftp
+{
+protocol            = udp
+port                    = 69
+socket_type     = dgram
+wait                   = yes
+user                  = nobody
+server               = /usr/sbin/in.tftpd
+server_args     = /tftpboot
+disable             = no
+}
+
+
+5. Restart TFTP
+
+/etc/init.d/xinetd restart
+
+
